@@ -1,0 +1,10 @@
+version: '2'
+services:
+    jobtracker: 
+        build: ./
+        container_name: lts-jobtracker
+        volumes: 
+            - ./config/application.yml:/data/application.yml:ro
+        entrypoint: 
+            - /entrypoint.sh
+            - --spring.config.location=/data/application.yml  

@@ -1,0 +1,21 @@
+version: '2.4'
+services:
+    registry:
+        image: registry.cn-hangzhou.aliyuncs.com/kennylee/registry:2
+        container_name: 'docker-registry'
+        ports:
+            - 443:443
+        volumes:
+            - ./data/registry:/var/lib/registry
+            - ./certs:/certs:ro
+        restart: on-failure
+        environment:
+            - REGISTRY_HTTP_ADDR=0.0.0.0:443
+            - REGISTRY_HTTP_TLS_CERTIFICATE=/certs/registry.crt
+            - REGISTRY_HTTP_TLS_KEY=/certs/registry.key
+        logging:
+            driver: 'json-file'
+            options:
+                max-size: '12m'
+                max-file: '5'
+

@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+    cadvisor:
+        image: registry.cn-hangzhou.aliyuncs.com/kennylee/cadvisor:apline
+        volumes:
+            - /:/rootfs:ro
+            - /var/run:/var/run:rw
+            - /sys:/sys:ro
+            - /var/lib/docker/:/var/lib/docker:ro
+            - /cgroup:/cgroup:ro
+        ports:
+            - 8080
+        restart: always
+        logging:
+            driver: 'json-file'
+            options:
+                max-size: '30m'
+                max-file: '1'
+
+

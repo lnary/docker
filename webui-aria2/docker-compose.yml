@@ -1,0 +1,17 @@
+version: '3'
+services:
+    webui-aria2:
+        image: registry.cn-hangzhou.aliyuncs.com/kennylee/webui-aria2
+        container_name: webui-aria2
+        volumes: 
+            - ${HOME}/downloads/:/data/
+            - ./aria2/:/home/dummy/.aria2/
+        ports: 
+            - "6800:6800"
+            - "9100:8080"
+        restart: unless-stopped
+        logging:
+            driver: 'json-file'
+            options:
+                max-size: '10m'
+                max-file: '1'

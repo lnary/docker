@@ -1,0 +1,20 @@
+version: '2.4'
+services:
+    app:
+        image: registry.cn-hangzhou.aliyuncs.com/kennylee/jenkins:2.164.3
+        ports: 
+            - 8080:8080
+            - 50000:50000
+        container_name: jenkins
+        restart: on-failure
+        environment:
+            - JAVA_OPTS=-server -Xms128m -Xmx1g -Djava.security.egd=file:/dev/./urandom -Djava.awt.headless=true
+            - JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
+        volumes:
+            - ./data/jenkins_home:/var/jenkins_home/:z
+            - ./data/share:/var/share:/z
+        logging:
+            driver: 'json-file'
+            options:
+                max-size: '30m'
+                max-file: '1'

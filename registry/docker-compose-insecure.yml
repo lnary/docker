@@ -1,0 +1,16 @@
+version: '2.4'
+services:
+    registry:
+        image: registry.cn-hangzhou.aliyuncs.com/kennylee/registry:2
+        container_name: 'docker-registry'
+        ports:
+            - 5000:5000
+        volumes:
+            - ./data/registry:/var/lib/registry
+        restart: on-failure
+        logging:
+            driver: 'json-file'
+            options:
+                max-size: '12m'
+                max-file: '5'
+

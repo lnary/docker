@@ -1,0 +1,18 @@
+# Ubuntu+python3+ppa
+#
+# Authoer: kennylee26
+
+FROM registry.cn-hangzhou.aliyuncs.com/kennylee/python3
+
+MAINTAINER kennylee26 <kennylee26@gmail.com>
+
+# Install.
+RUN \
+  apt-get update && \
+  apt-get -y upgrade && \
+  apt-get install -y build-essential && \
+  apt-get install -y software-properties-common && \
+  rm -rf /var/lib/apt/lists/*
+
+# Define default command.
+CMD ["bash"]

@@ -1,0 +1,43 @@
+version: '3'
+services:
+    docker_auth:
+        image: registry.cn-hangzhou.aliyuncs.com/kennylee/docker_auth
+        container_name: 'docker_auth'
+        ports:
+            - "${docker_auth_port}:5001"
+        volumes:
+            - ./auth_server/config:/config:ro
+            - ./data/docker_auth/logs:/logs
+            - ./certs:/ssl:ro
+        command: /config/auth_config.yml
+        restart: on-failure
+        logging:
+            driver: 'json-file'
+            options:
+                max-size: '12m'
+                max-file: '5'
+    registry:
+        image: registry.cn-hangzhou.aliyuncs.com/kennylee/registry:2
+        container_name: 'docker_registry'
+        ports:
+            - "443:443"
+        volumes:
+            - ./certs:/ssl:ro
+            - ./data/registry:/var/lib/registry
+        restart: on-failure
+        environment:
+            - REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY=/var/lib/registry
+            - REGISTRY_AUTH=token
+            - REGISTRY_AUTH_TOKEN_REALM=https://${docker_auth_public_ip}:${docker_auth_port}/auth # 注意修改.env文件中docker_auth_public_ip为外部访问ip
+            - REGISTRY_AUTH_TOKEN_SERVICE="Docker registry"
+            - REGISTRY_AUTH_TOKEN_ISSUER="Auth Service"
+            - REGISTRY_AUTH_TOKEN_ROOTCERTBUNDLE=/ssl/registry.crt
+            - REGISTRY_HTTP_ADDR=0.0.0.0:443
+            - REGISTRY_HTTP_TLS_CERTIFICATE=/ssl/registry.crt
+            - REGISTRY_HTTP_TLS_KEY=/ssl/registry.key
+        logging:
+            driver: 'json-file'
+            options:
+                max-size: '12m'
+                max-file: '5'
+
